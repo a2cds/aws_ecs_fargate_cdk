@@ -15,6 +15,8 @@ public class AwsEcsFargateCdkApp {
         ClusterStack clusterStack = new ClusterStack(app, "Cluster", vpcStack.getVpc());
         clusterStack.addDependency(vpcStack);
 
+        DdbStack ddbStack = new DdbStack(app, "Ddb");
+
         app.synth();
     }
 }
