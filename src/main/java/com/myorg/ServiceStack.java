@@ -2,10 +2,12 @@ package com.myorg;
 
 import software.amazon.awscdk.core.*;
 import software.amazon.awscdk.services.applicationautoscaling.EnableScalingProps;
+import software.amazon.awscdk.services.dynamodb.Table;
 import software.amazon.awscdk.services.ecs.*;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
 import software.amazon.awscdk.services.elasticloadbalancingv2.HealthCheck;
+import software.amazon.awscdk.services.iam.Grant;
 import software.amazon.awscdk.services.logs.LogGroup;
 
 import java.util.HashMap;
@@ -13,12 +15,12 @@ import java.util.Map;
 
 public class ServiceStack extends Stack {
 
-    public ServiceStack(final Construct scope, final String id, Cluster cluster) {
+    public ServiceStack(final Construct scope, final String id, Cluster cluster, Table table) {
 
-        this(scope, id, null, cluster);
+        this(scope, id, null, cluster, table);
     }
 
-    public ServiceStack(final Construct scope, final String id, final StackProps props, Cluster cluster) {
+    public ServiceStack(final Construct scope, final String id, final StackProps props, Cluster cluster, Table table) {
         super(scope, id, props);
 
         CfnParameter awsRegion = CfnParameter.Builder.create(this, "awsRegion")
@@ -75,6 +77,8 @@ public class ServiceStack extends Stack {
                         .scaleInCooldown(Duration.seconds(60))
                         .scaleOutCooldown(Duration.seconds(60))
                         .build());
+
+        table.grantReadWriteData(service01.getTaskDefinition().getTaskRole());
 
     }
 }
