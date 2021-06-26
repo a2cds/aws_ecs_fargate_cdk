@@ -39,7 +39,7 @@ public class ServiceStack extends Stack {
 
         ApplicationLoadBalancedTaskImageOptions task = ApplicationLoadBalancedTaskImageOptions.builder()
                 .containerName("ddb_sqs_demo")
-                .image(ContainerImage.fromRegistry("siecola/aws-ddb-sqs-javademo:1.0.0"))
+                .image(ContainerImage.fromRegistry("siecola/aws-ddb-sqs-java-demo:1.0.0"))
                 .containerPort(8080)
                 .logDriver(logDriver)
                 .environment(envVariables)
@@ -66,7 +66,7 @@ public class ServiceStack extends Stack {
         ScalableTaskCount scalableTaskCount = service01.getService()
                 .autoScaleTaskCount(EnableScalingProps.builder()
                         .minCapacity(2)
-                        .minCapacity(4)
+                        .maxCapacity(4)
                         .build());
 
         scalableTaskCount.scaleOnCpuUtilization("Service01AutoScaling",
